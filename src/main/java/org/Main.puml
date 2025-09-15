@@ -1,0 +1,62 @@
+@startuml
+
+class User {
+    -favouriteList
+    -likedList
+}
+class Admin {
+    +editUser(User)
+}
+class MediaEntry {
+    -type : MediaType
+    -title : String
+    -description : String
+    -releaseYear : Integer
+    -genre : String
+    -ageRestriction : Integer
+    -allRatings : List<Rating>
+    +editEntry()
+}
+class Rating {
+    -stars : Integer
+    -comment : String
+    -timestamp : Integer
+}
+interface IProfile {
+    -entryList
+    #editProfile()
+    #addEntry()
+    #removeEntry()
+    #updateEntry()
+    #rateEntry()
+    #editRating()
+    #deleteRating()
+}
+interface ICredentials {
+    #userName
+    #password
+}
+interface Likeable {
+    +addToLiked(IProfile)
+}
+interface Favourable {
+    +addToFavourites(IProfile)
+}
+enum MediaType {
+    MOVIE
+    SERIES
+    GAME
+}
+
+ICredentials <|.. Admin
+IProfile <|.. User
+ICredentials <|.. IProfile
+MediaEntry "x" *-- "1 " IProfile
+Rating "x" *-- "1" MediaEntry
+Likeable <|.. Rating
+Likeable <|.. MediaEntry
+Favourable <|.. MediaEntry
+Rating "x" *-- "1" IProfile
+MediaType *-- MediaEntry
+
+@enduml
