@@ -35,4 +35,12 @@ public class User extends Profile implements ParsableData {
     public void parseFromDB(Connection connection) throws SQLException {
 
     }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public Object getPassword() {
+        return password;
+    }
 }

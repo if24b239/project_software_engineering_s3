@@ -1,8 +1,10 @@
 package org.server.handlers;
 
 import com.sun.net.httpserver.HttpExchange;
+import org.data.Database;
+import org.data.DatabaseHandler;
+import org.data.User;
 import org.json.JSONObject;
-
 import java.io.IOException;
 
 public class RegistrationHandler extends BaseHandler {
@@ -31,7 +33,22 @@ public class RegistrationHandler extends BaseHandler {
                 return;
             }
 
-            //TODO: HERE STUFFS
+            String username = jsonRequest.getString("username");
+            String password = jsonRequest.getString("password");
+
+            // Validate username and password
+            if (username.length() < 3 || password.length() < 6) {
+                sendResponse(exchange, 400, "{\"error\": \"Invalid username or password\"}");
+                return;
+            }
+
+            Database db = DatabaseHandler.getDatabase();
+            boolean success = db.createUser(new User(username, password));
+
+            if (!success) {
+                sendResponse(exchange, 409, "{\"error\": \"Username already exists\"}");
+                return;
+            }
 
             sendResponse(exchange, 201, "{\"message\": \"Registration successful\"}");
 

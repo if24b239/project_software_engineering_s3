@@ -8,7 +8,7 @@ public class DatabaseHandler {
 
     public static Database getDatabase() {
         synchronized (DatabaseHandler.class) {
-            if (instance != null)
+            if (instance == null)
                 instance = new Database();
         }
 
